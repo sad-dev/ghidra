@@ -151,6 +151,11 @@ public class DecompilerController {
 		decompilerPanel.optionsChanged(decompilerOptions);
 	}
 
+	public void toggleDeadcodeDelay(String spaceName) {
+		clearCache();
+		decompilerMgr.toggleDeadcodeDelay(spaceName);
+	}
+
 	public boolean isDecompiling() {
 		return decompilerMgr.isBusy();
 	}

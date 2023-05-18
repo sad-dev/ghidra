@@ -380,8 +380,15 @@ void SetAction::rawAction(void)
 {
   res = false;
   
-  if (actionstring.size() != 0)
-    ghidra->allacts.setCurrent(actionstring);
+  if (actionstring.size() != 0) {
+    if (actionstring == "deadcodedelay") {
+      ghidra->setDeadcodeDelay(ghidra->getSpaceByName(printstring), 40);
+    } else if (actionstring == "nodeadcodedelay") {
+      ghidra->setDeadcodeDelay(ghidra->getSpaceByName(printstring), 0);
+    } else {
+      ghidra->allacts.setCurrent(actionstring);
+    }
+  }
   if (printstring.size() != 0) {
     if (printstring == "tree")
       ghidra->setSendSyntaxTree(true);

@@ -23,6 +23,7 @@ package ghidra.app.decompiler;
 
 import java.io.*;
 
+import java.util.HashMap;
 import generic.jar.ResourceFile;
 import ghidra.app.plugin.processors.sleigh.SleighLanguage;
 import ghidra.app.plugin.processors.sleigh.UniqueLayout;
@@ -137,6 +138,7 @@ public class DecompInterface {
 	protected EncodeDecodeSet overlayEncodingSet;	// Encoders/decoders for functions in overlays
 	protected StringIngest stringResponse = new StringIngest();	// Ingester for simple responses
 	private DecompileDebug debug;
+	private HashMap<String, Boolean> deadcodeDelayStore = new HashMap<>();
 	protected CancelledListener monitorListener = new CancelledListener() {
 		@Override
 		public void cancelled() {
@@ -665,6 +667,36 @@ public class DecompInterface {
 		stopProcess();
 		return false;
 	}
+
+	public synchronized boolean toggleDeadcodeDelay(String spaceName) {
+		deadcodeDelayStore.putIfAbsent(spaceName, false);
+		boolean deadcodeDelay = !deadcodeDelayStore.get(spaceName);
+		deadcodeDelayStore.put(spaceName, deadcodeDelay);
+		decompileMessage = "";
+		// Property can be set before process exists
+		if (decompProcess == null) {
+			return true;
+		}
+		try {
+			verifyProcess();
+			decompProcess.sendCommand2Params(
+				"setAction",
+				deadcodeDelay ? "deadcodedelay" : "nodeadcodedelay",
+				spaceName,
+				stringResponse
+			);
+			return stringResponse.toString().equals("t");
+		}
+		catch (IOException e) {
+			// don't care
+		}
+		catch (DecompileException e) {
+			// don't care
+		}
+		stopProcess();
+		return false;
+	}
+
 
 	/**
 	 * Get the options currently in effect for the decompiler

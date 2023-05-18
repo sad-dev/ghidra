@@ -63,6 +63,10 @@ public class DecompilerManager {
 		decompiler.setOptions(decompilerOptions);
 	}
 
+	void toggleDeadcodeDelay(String spaceName) {
+		decompiler.toggleDeadcodeDelay(spaceName);
+	}
+
 	/**
 	 * Returns the TaskMonitorComponent created by the RunManager and to be used in the
 	 * DecompilerPanel.

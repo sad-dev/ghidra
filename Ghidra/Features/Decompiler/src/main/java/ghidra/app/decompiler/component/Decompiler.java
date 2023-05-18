@@ -28,6 +28,7 @@ class Decompiler {
 	private DecompileOptions options;
 	private int timeout;
 	private volatile boolean optionsChanged = false;
+	private volatile String deadcodeDelaySpace = "";
 
 	Decompiler(DecompileOptions options, int timeout) {
 		this.options = options;
@@ -43,6 +44,11 @@ class Decompiler {
 		optionsChanged = true;
 	}
 
+	void toggleDeadcodeDelay(String spaceName) {
+		this.deadcodeDelaySpace = spaceName;
+		optionsChanged = true;
+	}
+
 	DecompileResults decompile(Program program, Function function, File debugFile,
 			TaskMonitor monitor) throws DecompileException {
 		DecompInterface ifc = getDecompilerInterface(program);
@@ -51,6 +57,7 @@ class Decompiler {
 			ifc.enableDebug(debugFile);
 		}
 		if (optionsChanged) {
+			ifc.toggleDeadcodeDelay(deadcodeDelaySpace);
 			ifc.setOptions(options);
 			optionsChanged = false;
 		}

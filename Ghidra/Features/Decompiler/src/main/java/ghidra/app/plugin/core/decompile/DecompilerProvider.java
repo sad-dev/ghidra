@@ -183,6 +183,15 @@ public class DecompilerProvider extends NavigatableComponentProviderAdapter
 		}
 	}
 
+	public void toggleDeadcodeDelay(String spaceName) {
+		controller.toggleDeadcodeDelay(spaceName);
+		if (currentLocation != null) {
+			ProgramLocation loc = currentLocation;
+			controller.refreshDisplay(program, currentLocation, null);
+			goToAddress(loc.getAddress(), false);
+		}
+	}
+
 	@Override
 	public ActionContext getActionContext(MouseEvent event) {
 		if (program == null) {
@@ -979,6 +988,14 @@ public class DecompilerProvider extends NavigatableComponentProviderAdapter
 		EditPropertiesAction propertiesAction = new EditPropertiesAction(owner, tool);
 		setGroupInfo(propertiesAction, optionsGroup, subGroupPosition++);
 
+		String deadcodeGroup = "comment7 - Deadcode Group";
+		subGroupPosition = 0; // reset for the next group
+		tool.setMenuGroup(new String[] { "ToggleDeadcode" }, highlightGroup);
+		ToggleStackDeadcodeAction stackDeadcodeAction = new ToggleStackDeadcodeAction();
+		setGroupInfo(stackDeadcodeAction, deadcodeGroup, subGroupPosition++);
+		ToggleRegisterDeadcodeAction regDeadcodeAction = new ToggleRegisterDeadcodeAction();
+		setGroupInfo(regDeadcodeAction, deadcodeGroup, subGroupPosition++);
+
 		//
 		// These actions are not in the popup menu
 		//
@@ -1034,6 +1051,8 @@ public class DecompilerProvider extends NavigatableComponentProviderAdapter
 		addLocalAction(findAction);
 		addLocalAction(findReferencesAction);
 		addLocalAction(propertiesAction);
+		addLocalAction(stackDeadcodeAction);
+		addLocalAction(regDeadcodeAction);
 		addLocalAction(cloneDecompilerAction);
 		addLocalAction(goToNextBraceAction);
 		addLocalAction(goToPreviousBraceAction);
