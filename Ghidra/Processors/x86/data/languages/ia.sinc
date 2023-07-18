@@ -540,6 +540,7 @@ define pcodeop mwaitx;
 define pcodeop monitor;
 define pcodeop monitorx;
 define pcodeop swi;        # for INT instruction
+define pcodeop alloca_probe;
 
 define pcodeop LOCK;       # for LOCK prefix
 define pcodeop UNLOCK;     # for LOCK prefix
