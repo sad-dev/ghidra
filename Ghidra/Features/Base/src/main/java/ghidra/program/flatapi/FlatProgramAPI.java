@@ -73,6 +73,7 @@ public class FlatProgramAPI {
 	protected TaskMonitor monitor;
 
 	private int transactionID = -1;
+	private boolean isSilent = false;
 
 	/**
 	 * Constructs a new flat program API.
@@ -2616,5 +2617,12 @@ public class FlatProgramAPI {
 			}
 		}
 		return null;
+	}
+
+	public boolean isSilent() {
+		return this.isSilent;
+	}
+	public void setSilence(boolean isSilent) {
+		this.isSilent = isSilent;
 	}
 }

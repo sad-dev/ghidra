@@ -42,10 +42,13 @@ class RunScriptTask extends Task {
 	public void run(TaskMonitor monitor) {
 		try {
 			Thread.currentThread().setName(scriptName);
-
-			console.addMessage(scriptName, "Running...");
+			if (!script.isSilent()) {
+				console.addMessage(scriptName, "Running...");
+			}
 			script.execute(currentState, monitor, console.getStdOut());
-			console.addMessage(scriptName, "Finished!");
+			if (!script.isSilent()) {
+				console.addMessage(scriptName, "Finished!");
+			}
 		}
 		catch (CancelledException e) {
 			console.addErrorMessage(scriptName, "User cancelled script.");
