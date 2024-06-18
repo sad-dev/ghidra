@@ -121,7 +121,7 @@ public class ShowInstructionInfoPlugin extends ProgramPlugin {
 				goToSurroundingFunction();
 			}
 		});
-		functionPanel.setPreferredSize(new Dimension(130, functionLabel.getPreferredSize().height));
+		functionPanel.setPreferredSize(new Dimension(260, functionLabel.getPreferredSize().height));
 		functionLabel.setToolTipText("Current Function");
 		functionPanel.add(functionLabel);
 		functionPanel.setName("Current Function");
@@ -364,7 +364,9 @@ public class ShowInstructionInfoPlugin extends ProgramPlugin {
 			currentProgram.getListing().getFunctionContaining(currentLocation.getAddress());
 		boolean insideFunction = currentFunction != null;
 		if (insideFunction) {
-			functionLabel.setText(" " + currentFunction.getName() + " ");
+			long offset = currentLocation.getAddress().getOffset() - currentFunction.getEntryPoint().getOffset();
+			String addrString = String.format("0x%x : %s ", offset, currentFunction.getName());
+			functionLabel.setText(addrString);
 			functionLabel.setToolTipText(
 				currentFunction.getName() + CURRENT_FUNCTION_APPEND_STRING);
 		}
