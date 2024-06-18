@@ -107,6 +107,10 @@ public class CompareBSimSignaturesScript extends GhidraScript {
 		buf.append("\n");
 		lastvector.compareDetail(vec, buf);
 		println(buf.toString());
+		if (askYesNo("CompareBSimSigs", "Clear stored base fn?")) {
+			System.clearProperty("ghidra.lastprogram");
+			System.clearProperty("ghidra.lastaddress");
+		}
 	}
 
 	private void setProperties(Function func) {
